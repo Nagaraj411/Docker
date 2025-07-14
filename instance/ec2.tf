@@ -1,5 +1,5 @@
 # This script will run instance & security Group inbound rules & ourbound rules 
-resource "aws_instance" "roboshop" {
+resource "aws_instance" "docker" {
   ami           = "ami-09c813fb71547fc4f"
   instance_type = "t3.micro"
   vpc_security_group_ids = [ aws_security_group.allow_all.id ] # Security Group ID
@@ -30,4 +30,13 @@ resource "aws_security_group" "allow_all" {
     tags = {
         Name = "allow-all (New)"
     }
+}
+
+resource "aws_route53_record" "docker" {
+  zone_id         = "Z05005862BAG0R5BQ5WUP"
+  name            = "docker.devops84.shop"  # e.g., docker.devops84.shop
+  type            = "A"
+  ttl             = 1
+  records         = [aws_instance.docker.public_ip]
+  allow_overwrite = true
 }
