@@ -37,12 +37,3 @@ resource "aws_security_group" "allow_all_docker" {
         Name = "allow-all-docker"
     }
 }
-
-resource "aws_route53_record" "docker" {
-  zone_id         = "Z05005862BAG0R5BQ5WUP"
-  name            = "docker.devops84.shop"  # e.g., docker.devops84.shop
-  type            = "A"
-  ttl             = 1
-  records         = [aws_instance.docker.public_ip]
-  allow_overwrite = true
-}
