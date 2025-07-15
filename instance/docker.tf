@@ -2,15 +2,20 @@
 resource "aws_instance" "docker" {
   ami           = "ami-09c813fb71547fc4f"
   instance_type = "t3.micro"
-  vpc_security_group_ids = [ aws_security_group.allow_all.id ] # Security Group ID
-  # user_data = file("docker.sh") # User data script to install Docker
-  
+  vpc_security_group_ids = [aws_security_group.allow_all_docker.id] # Security Group ID
+
+  root_block_device {
+    volume_size = 50
+    volume_type = "gp3" # or "gp2", depending on your preference
+  }
+
+  user_data = file("docker.sh") # User data script to install Docker
   tags = { # Tags for the instance
     Name = "Docker" # Name of the instance
   }
 }
-resource "aws_security_group" "allow_all" {
-    name        = "allow_all (New)"
+resource "aws_security_group" "allow_all_docker" {
+    name        = "allow_all_docker"
     description = "allow all traffic"
 
     ingress {
@@ -29,7 +34,7 @@ resource "aws_security_group" "allow_all" {
     }
 
     tags = {
-        Name = "allow-all (New)"
+        Name = "allow-all-docker"
     }
 }
 
